@@ -1,3 +1,7 @@
+<div class="container">
+
+
+
 <div class="card mt-5 shadow-lg">
   <div class="card-header bg-primary text-white">
     <h4 class="mb-0">Product List</h4>
@@ -17,31 +21,25 @@
         <!-- <tr *ngFor="let user of users"> -->
         @for (product of products; track $index) {
         <tr>
-         <td>
+          <td>
             <!-- Display the first image -->
-            <img
-              *ngIf="product.images && product.images.length > 0"
-              [src]="product.images[0]?.url"
-              alt="{{ product.name }}"
-              class="img-thumbnail"
-              style="width: 80px; height: 80px;"
-            />
+
+            <img *ngIf="product.images && product.images.length > 0" [src]="product.images[0]?.image_url"
+              alt="{{ product.name }}" class="img-thumbnail" style="width: 80px; height: 80px;" />
+
           </td>
-          
+
           <td>{{ product.name }}</td>
           <td>{{ product.sku }}</td>
           <td>Price: ₹{{ product.price }}</td>
           <td>
-              <button class="btn btn-sm btn-info me-2" (click)="editUser(product)">
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button
-                class="btn btn-sm btn-danger"
-                (click)="deleteUser(product.id)"
-              >
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
+            <button class="btn btn-sm btn-info me-2" (click)="editUser(product)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteUser(product.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
         </tr>
         }
       </tbody>
@@ -50,4 +48,7 @@
       @if (products.length === 0) { No user Found! }
     </div>
   </div>
+</div>
+
+
 </div>

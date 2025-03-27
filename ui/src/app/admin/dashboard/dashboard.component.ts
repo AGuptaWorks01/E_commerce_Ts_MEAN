@@ -12,10 +12,10 @@ import { CommonModule } from '@angular/common';
 export class DashboardComponent {
   products: any[] = []; // hold orginal data
 
-  private productService = inject(ProductService)
+  private productService = inject(ProductService);
 
   ngOnInit(): void {
-    this.loadProducts()
+    this.loadProducts();
   }
 
   loadProducts(): void {
