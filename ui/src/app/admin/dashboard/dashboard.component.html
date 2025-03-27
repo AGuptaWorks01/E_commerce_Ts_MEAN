@@ -1,0 +1,25 @@
+<div class="container mt-4">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <!-- Looping through products array -->
+    <div class="col" *ngFor="let product of products">
+      <div class="card h-100 shadow-sm">
+        <!-- Product Image -->
+        <img
+          *ngIf="product.images.length > 0"
+          [src]="product.images[0]?.url"
+          class="card-img-top"
+        />
+
+        <!-- Card Content -->
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">
+            SKU: {{ product.sku }} <br />
+            Price: ₹{{ product.price }}
+          </p>
+        </div>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+  </div>
+</div>
