@@ -1,4 +1,4 @@
-# *8E-commerce Admin Panel - Product Module**
+# **E-commerce Admin Panel - Product Module**
 
 This project is an Admin Panel for managing products in an E-commerce platform. It allows administrators to perform CRUD (Create, Read, Update, Delete) operations on product details such as SKU, Name, Price, and Images.
  --- 
