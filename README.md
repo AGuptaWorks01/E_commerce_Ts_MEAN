@@ -58,7 +58,7 @@ Database Setup
 PostgreSQL Setup
 Create a PostgreSQL database named ecommerce_admin_panel.
 
-Set up the database connection in the backend (ormconfig.json):
+-- Set up the database connection in the backend (ormconfig.json):
 
 {
   "type": "postgres",
@@ -71,10 +71,11 @@ Set up the database connection in the backend (ormconfig.json):
   "synchronize": true,
   "logging": true
 }
-
-
+`
+``` 
+---
 Running the Application
-1. Running the Backend
+1. **Running the Backend**
 To start the backend server, navigate to the backend folder and run:
 
 
@@ -82,21 +83,22 @@ To start the backend server, navigate to the backend folder and run:
 cd backend
 
 npm run dev:watch
-The backend will be running at http://localhost:3000.
+The backend will be running at `http://localhost:3000`.
 ```
 
-2. Running the Frontend
+2. **Running the Frontend**:
 To start the Angular frontend, navigate to the frontend folder and run:
 
 ```bash
 cd frontend
 ng serve
-The frontend will be running at http://localhost:4200.
+The frontend will be running at `http://localhost:4200`.
 ```
 
-API Routes
-Method	Endpoint	Description
-GET	/products	Fetch all products
-POST	/products	Create a new product
-PUT	/products/:id	Update an existing product
-DELETE	/products/:id	Delete a product
+> **API Routes**   
+Method   	Endpoint			Description   
+GET			/products			Fetch all products  
+GET			/products/:id		View One Product  
+POST		/products			Create a new product   
+PUT			/products/:id		Update an existing product   
+DELETE		/products/:id		Delete a product   
