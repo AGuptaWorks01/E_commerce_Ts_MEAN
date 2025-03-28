@@ -40,37 +40,40 @@ cd frontend
 ```bash
 npm install
 ```
-Frontend Setup
+
+**Frontend Setup**
 The frontend of the Admin Panel is built using Angular 17/18. It includes components for:
 
-Listing products
+> Listing products
 
-Adding new products
+> View product by ID
 
-Editing existing products
+> Adding new products
 
-Deleting products
+> Editing existing products
 
-Backend Setup
+> Deleting products
+
+**Backend Setup**
 The backend is built using Node.js and Express.js, with TypeORM for interacting with the PostgreSQL database. The backend exposes API endpoints to perform CRUD operations on products.
 
-Database Setup
-PostgreSQL Setup
-Create a PostgreSQL database named ecommerce_admin_panel.
+> Database Setup   
+> PostgreSQL Setup   
+> Create a PostgreSQL database named ecommerce_admin_panel.   
 
 -- Set up the database connection in the backend (ormconfig.json):
 
-{
-  "type": "postgres",
-  "host": "localhost",
-  "port": 5432,
-  "username": "your_db_username",
-  "password": "your_db_password",
-  "database": "ecommerce_admin_panel",
-  "entities": ["src/entity/**/*.ts"],
-  "synchronize": true,
-  "logging": true
-}
+{   
+  "type": "postgres",   
+  "host": "localhost",    
+  "port": 5432,   
+  "username": "your_db_username",   
+  "password": "your_db_password",   
+  "database": "ecommerce_admin_panel",   
+  "entities": ["src/entity/**/*.ts"],    
+  "synchronize": true,   
+  "logging": true    
+}  
 `
 ``` 
 ---
@@ -79,7 +82,7 @@ Running the Application
 To start the backend server, navigate to the backend folder and run:
 
 
-```bash
+
 cd backend
 
 npm run dev:watch
