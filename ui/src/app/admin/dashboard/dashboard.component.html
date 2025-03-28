@@ -4,32 +4,58 @@
     <div class="col" *ngFor="let product of products">
       <div class="card h-100 shadow-sm">
         <!-- Product Image with carousel -->
-        <div class="card-img-wrapper" style="padding: 10px;">
-          <div id="carouselProduct{{product.id}}" class="carousel slide" data-bs-ride="carousel">
+        <div class="card-img-wrapper" style="padding: 10px">
+          <div
+            id="carouselProduct{{ product.id }}"
+            class="carousel slide"
+            data-bs-ride="carousel"
+          >
             <div class="carousel-inner">
-              <!-- Loop through images dynamically -->
-              <div *ngFor="let image of product.images; let i = index" [class.active]="i === 0" class="carousel-item">
-                <img [src]="image.image_url" class="d-block w-100" alt="{{ product.name }} Image {{ i + 1 }}"
-                  style="object-fit: cover; height: 200px;" />
+              <div
+                *ngFor="let image of product.images; let i = index"
+                [class.active]="i === 0"
+                class="carousel-item"
+              >
+                <img
+                  [src]="image.image_url"
+                  class="d-block w-100"
+                  alt="{{ product.name }} Image {{ i + 1 }}"
+                  style="object-fit: cover; height: 200px"
+                />
               </div>
             </div>
 
             <!-- Carousel controls -->
-            <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#carouselProduct' + product.id"
-              data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              [attr.data-bs-target]="'#carouselProduct' + product.id"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
               <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#carouselProduct' + product.id"
-              data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+            <button
+              class="carousel-control-next"
+              type="button"
+              [attr.data-bs-target]="'#carouselProduct' + product.id"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
               <span class="visually-hidden">Next</span>
             </button>
           </div>
         </div>
 
         <!-- Card Content -->
-        <div class="card-body">
+        <div class="card-body text-center">
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text">
             <strong>SKU:</strong> {{ product.sku }} <br />
@@ -39,8 +65,89 @@
 
         <!-- Action Button -->
         <div class="card-footer text-center">
-          <a href="#" class="btn btn-primary w-100">View Product</a>
+          <button
+            (click)="viewProduct(product.id)"
+            class="btn btn-primary w-100"
+          >
+            View Product
+          </button>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  ---------------------------------------- Modal  for viewProduct-->
+<div
+  id="productModal"
+  class="modal fade"
+  tabindex="-1"
+  aria-hidden="true"
+  style="display: none"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title text-center ">
+          {{ selectedProduct.name | uppercase }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeModal()"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <!-- Carousel -->
+        <div id="carouselModal" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div
+              *ngFor="let image of selectedProduct.images; let i = index"
+              [class.active]="i === 0"
+              class="carousel-item"
+            >
+              <img
+                [src]="image.image_url"
+                class="d-block w-100"
+                alt="{{ selectedProduct.name }} Image"
+                style="object-fit: cover; height: 400px"
+              />
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselModal"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselModal"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+
+        <!-- Product Details -->
+        <div class="mt-4 text-center">
+          <p><strong>SKU:</strong> {{ selectedProduct.sku }}</p>
+          <p><strong>Price:</strong> ₹{{ selectedProduct.price }}</p>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          Close
+        </button>
       </div>
     </div>
   </div>

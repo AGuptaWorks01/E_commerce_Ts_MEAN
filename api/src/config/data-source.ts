@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: true,  // Automatically creates tables based on entities
     logging: true,
-    entities: [Product, ProductImage],
+    entities: [Product, ProductImage], 
     migrations: [],
     subscribers: [],
 });

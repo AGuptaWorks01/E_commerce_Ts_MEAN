@@ -100,7 +100,8 @@ class ProductController {
     }
   }
 
-  // ✅ Update product
+  // Update product
+
   static async updateProduct(req: Request, res: Response) {
     const id = parseInt(req.params.id);
     const { sku, name, price } = req.body;
@@ -115,20 +116,44 @@ class ProductController {
         return res.status(404).json({ message: "Product not found" });
       }
 
+      // Update product fields
       product.sku = sku || product.sku;
       product.name = name || product.name;
       product.price = parseFloat(price) || product.price;
 
+      // Handle image updates
+      if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+        // Remove old images
+        await AppDataSource.manager.remove(ProductImage, product.images);
+
+        // Add new images
+        const imagePaths = (req.files as Express.Multer.File[]).map((file) => file.path);
+
+        const newImages = imagePaths.map((path) => {
+          const image = new ProductImage();
+          image.image_url = path;
+          image.product = product;
+          return image;
+        });
+
+        product.images = newImages;
+      }
+
       await AppDataSource.manager.save(product);
 
-      res
-        .status(200)
-        .json({ message: "Product updated successfully", product });
+      // ✅ Convert to plain object to avoid circular reference
+      const plainProduct = plainToClass(Product, product);
+
+      res.status(200).json({
+        message: "Product updated successfully",
+        product: plainProduct,
+      });
     } catch (error) {
-      console.error(error);
+      console.error("Error updating product:", error);
       res.status(500).json({ message: "Error updating product" });
     }
   }
+
 
   // ✅ Delete product
   static async deleteProduct(req: Request, res: Response) {

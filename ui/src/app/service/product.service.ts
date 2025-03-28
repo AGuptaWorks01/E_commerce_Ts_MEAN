@@ -13,25 +13,29 @@ export class ProductService {
   // backend api 
   private baseUrl = `${environment.baseUrl}/products`
 
-  constructor() { }
-
+  // get all product method
   getProducts(): Observable<any> {
-    return this.http.get(`${this.baseUrl}`);
+    return this.http.get<any[]>(`${this.baseUrl}`);
   }
 
+  // get by id each product
   getProductById(id: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${id}`)
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
 
-  addProduct(formData: FormData): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, formData);
+  // for adding new product
+  addProduct(product: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}`, product);
   }
 
+  // for updating existing product
   updateProduct(id: number, product: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, product)
+    return this.http.put<any>(`${this.baseUrl}/${id}`, product);
   }
 
+  // delete product mehtod
   deleteProduct(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`)
+    return this.http.delete<any>(`${this.baseUrl}/${id}`);
   }
+
 }

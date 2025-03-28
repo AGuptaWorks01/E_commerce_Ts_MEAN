@@ -1,0 +1,80 @@
+<div
+  class="container-fluid d-flex justify-content-center align-items-center vh-100"
+>
+  <div class="card shadow-lg p-5" style="width: 55rem; max-height: 90vh">
+    <h2 class="text-center text-primary fw-bold mb-4">
+      {{ productData.id ? "Edit Product" : "Add Product" }}
+    </h2>
+
+    <form (ngSubmit)="addProduct()">
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <label for="sku" class="form-label fw-semibold">SKU</label>
+          <input
+            type="text"
+            id="sku"
+            class="form-control"
+            [(ngModel)]="productData.sku"
+            name="sku"
+            placeholder="Enter SKU"
+            required
+          />
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <label for="name" class="form-label fw-semibold">Name</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            [(ngModel)]="productData.name"
+            name="name"
+            placeholder="Enter Product Name"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <label for="price" class="form-label fw-semibold">Price</label>
+          <input
+            type="number"
+            id="price"
+            class="form-control"
+            [(ngModel)]="productData.price"
+            name="price"
+            placeholder="Enter Price"
+            required
+          />
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <label for="images" class="form-label fw-semibold"
+            >Upload Images</label
+          >
+          <input
+            type="file"
+            id="images"
+            class="form-control"
+            (change)="onFileSelected($event)"
+            multiple
+          />
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-4 mt-4">
+        <button
+          class="btn btn-outline-secondary px-4 py-2"
+          (click)="closeModal()"
+        >
+          Close
+        </button>
+
+        <button type="submit" class="btn btn-primary px-4 py-2">
+          {{ productData.id ? "Update" : "Save" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

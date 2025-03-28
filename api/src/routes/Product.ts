@@ -1,6 +1,6 @@
 import express from "express";
 import ProductController from "../controllers/ProductController"
-import upload  from "../middleware/upload";
+import upload from "../middleware/upload";
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get("/:id", upload.array("images", 5), async (req, res) => {
     await ProductController.getProductById(req, res);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.array("images", 5), async (req, res) => {
     await ProductController.updateProduct(req, res);
 });
 
