@@ -5,7 +5,7 @@ import { ProductImage } from "../entity/ProductImage ";
 import { plainToClass } from "class-transformer";
 
 class ProductController {
-  // ✅ Create Product
+  // Create Product
   static async createProduct(req: Request, res: Response) {
     try {
       const { sku, name, price } = req.body;
@@ -55,7 +55,8 @@ class ProductController {
     }
   }
 
-  // ✅ Get all products
+
+  //  Get all products
   static async getProducts(req: Request, res: Response) {
     try {
       const baseUrl = "http://localhost:3000/"; // Adjust this to match your server's URL
@@ -80,7 +81,7 @@ class ProductController {
     }
   }
 
-  // ✅ Get product by ID
+  //  Get product by ID
   static async getProductById(req: Request, res: Response) {
     const id = parseInt(req.params.id);
     try {
@@ -141,7 +142,8 @@ class ProductController {
 
       await AppDataSource.manager.save(product);
 
-      // ✅ Convert to plain object to avoid circular reference
+
+
       const plainProduct = plainToClass(Product, product);
 
       res.status(200).json({
@@ -155,7 +157,7 @@ class ProductController {
   }
 
 
-  // ✅ Delete product
+  //  Delete product
   static async deleteProduct(req: Request, res: Response) {
     const id = parseInt(req.params.id);
 
