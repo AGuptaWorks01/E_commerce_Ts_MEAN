@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(cors({
-    origin: '*',  // Allow all origins
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"))
 
-// Routes
+
 app.use("/api/products", (req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     next();
