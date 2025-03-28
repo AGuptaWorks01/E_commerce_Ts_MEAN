@@ -1,5 +1,7 @@
-## E-commerce Admin Panel - Product Module
+# *8E-commerce Admin Panel - Product Module**
+
 This project is an Admin Panel for managing products in an E-commerce platform. It allows administrators to perform CRUD (Create, Read, Update, Delete) operations on product details such as SKU, Name, Price, and Images.
+ --- 
 
 > #Technologies Used
 Frontend: Angular (17/18), TypeScript
@@ -10,24 +12,34 @@ Database: PostgreSQL
 
 Other: HTML, CSS (Bootstrap for styling)
 
-Cloning the Repository
+
+## **📌 Step 1: Clone the GitHub Repository**
 To clone the repository, run the following command:
 
-bash
-git clone <repository-url>
-cd <repository-folder>
+```bash
+git clone https://github.com/AGuptaWorks01/E_commerce_Ts_MEAN
+```
+```bash
+cd E_commerce_Ts_MEAN
+```
+
 Installing Dependencies
 For Backend (Node.js + TypeORM)
 Navigate to the backend folder and install the dependencies:
 
 cd backend
+```bash
 npm install
+```
+
 For Frontend (Angular)
 Navigate to the frontend folder and install the dependencies:
 
 
 cd frontend
+```bash
 npm install
+```
 Frontend Setup
 The frontend of the Admin Panel is built using Angular 17/18. It includes components for:
 
@@ -66,17 +78,21 @@ Running the Application
 To start the backend server, navigate to the backend folder and run:
 
 
+```bash
 cd backend
-npm run start
+
+npm run dev:watch
 The backend will be running at http://localhost:3000.
+```
 
 2. Running the Frontend
 To start the Angular frontend, navigate to the frontend folder and run:
 
-
+```bash
 cd frontend
 ng serve
 The frontend will be running at http://localhost:4200.
+```
 
 API Routes
 Method	Endpoint	Description
