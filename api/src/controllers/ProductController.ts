@@ -142,8 +142,6 @@ class ProductController {
 
       await AppDataSource.manager.save(product);
 
-
-
       const plainProduct = plainToClass(Product, product);
 
       res.status(200).json({

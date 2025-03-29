@@ -28,7 +28,6 @@ export class ProductService {
     return this.http.post<any>(`${this.baseUrl}`, product);
   }
 
-
   // for updating existing product
   updateProduct(id: number, product: any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/${id}`, product);
@@ -38,5 +37,6 @@ export class ProductService {
   deleteProduct(id: number): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/${id}`);
   }
+
 
 }

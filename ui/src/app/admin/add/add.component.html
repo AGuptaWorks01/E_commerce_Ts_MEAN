@@ -3,10 +3,10 @@
 >
   <div class="card shadow-lg p-5" style="width: 55rem; max-height: 90vh">
     <h2 class="text-center text-primary fw-bold mb-4">
-      {{ productData.id ? "Edit Product" : "Add Product" }}
+      {{ productId ? "Edit Product" : "Add Product" }}
     </h2>
 
-    <form (ngSubmit)="addProduct()">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-md-6 mb-4">
           <label for="sku" class="form-label fw-semibold">SKU</label>
@@ -14,11 +14,21 @@
             type="text"
             id="sku"
             class="form-control"
-            [(ngModel)]="productData.sku"
-            name="sku"
+            formControlName="sku"
             placeholder="Enter SKU"
             required
           />
+          <div
+            *ngIf="
+              productForm.get('sku')?.invalid && productForm.get('sku')?.touched
+            "
+            class="text-danger"
+          >
+            SKU is required (min 3 characters).
+          </div>
+          <div *ngIf="skuExistError" class="text-danger">
+            SKU already exists. Please use a different SKU.
+          </div>
         </div>
 
         <div class="col-md-6 mb-4">
@@ -27,11 +37,19 @@
             type="text"
             id="name"
             class="form-control"
-            [(ngModel)]="productData.name"
-            name="name"
+            formControlName="name"
             placeholder="Enter Product Name"
             required
           />
+          <div
+            *ngIf="
+              productForm.get('name')?.invalid &&
+              productForm.get('name')?.touched
+            "
+            class="text-danger"
+          >
+            Name is required.
+          </div>
         </div>
       </div>
 
@@ -42,11 +60,19 @@
             type="number"
             id="price"
             class="form-control"
-            [(ngModel)]="productData.price"
-            name="price"
+            formControlName="price"
             placeholder="Enter Price"
             required
           />
+          <div
+            *ngIf="
+              productForm.get('price')?.invalid &&
+              productForm.get('price')?.touched
+            "
+            class="text-danger"
+          >
+            Price must be greater than 0.
+          </div>
         </div>
 
         <div class="col-md-6 mb-4">
@@ -71,8 +97,12 @@
           Close
         </button>
 
-        <button type="submit" class="btn btn-primary px-4 py-2">
-          {{ productData.id ? "Update" : "Save" }}
+        <button
+          type="submit"
+          class="btn btn-primary px-4 py-2"
+          [disabled]="productForm.invalid"
+        >
+          {{ productId ? "Update" : "Save" }}
         </button>
       </div>
     </form>

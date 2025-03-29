@@ -6,7 +6,7 @@ import { AppDataSource } from "./config/data-source";
 
 dotenv.config();
 
-const app = express();
+const app = express() || 3000;
 const PORT = process.env.PORT;
 
 app.use(cors({
@@ -24,6 +24,7 @@ app.use("/api/products", (req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     next();
 }, productRoutes);
+
 AppDataSource.initialize().then(() => {
     console.log("Database connected");
     app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));

@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { Product } from "../entity/Products";
 import { ProductImage } from "../entity/ProductImage ";

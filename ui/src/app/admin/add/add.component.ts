@@ -1,31 +1,36 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ProductService } from '../../service/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../interface/product';
+
 @Component({
   selector: 'app-add',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add.component.html',
   styleUrls: ['./add.component.css']
 })
 export class AddComponent {
-  private productService = inject(ProductService)
-  private route = inject(ActivatedRoute)
-  private router = inject(Router)
+  private productService = inject(ProductService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
 
   productId: number | null = null;
-  productData: Product = {
-    sku: '',
-    price: 0,
-    name: '',
-    images: []
-  };
-
-  // To store the selected image files
+  productForm: FormGroup;
   selectedFiles: File[] = [];
+  skuExistError: boolean = false;
+
+  constructor() {
+    this.productForm = this.fb.group({
+      sku: ['', [Validators.required, Validators.minLength(3)]],
+      name: ['', Validators.required],
+      price: [0, [Validators.required, Validators.min(1)]],
+      images: [null]
+    });
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -38,27 +43,28 @@ export class AddComponent {
   }
 
   loadProductData(id: number): void {
-    this.productService.getProductById(id).subscribe((data) => {
-      this.productData = data;
+    this.productService.getProductById(id).subscribe((data: Product) => {
+      this.productForm.patchValue({
+        sku: data.sku,
+        name: data.name,
+        price: data.price
+      });
     });
   }
 
-  // Capture the image files when selected
+  // Capture image files
   onFileSelected(event: any): void {
     const files = event.target.files;
     this.selectedFiles = Array.from(files);
   }
 
-  // Prepare FormData to send images + product data
+  // Prepare FormData
   prepareFormData(): FormData {
     const formData = new FormData();
+    formData.append('sku', this.productForm.get('sku')?.value);
+    formData.append('name', this.productForm.get('name')?.value);
+    formData.append('price', this.productForm.get('price')?.value.toString());
 
-    // Append the product data fields
-    formData.append('sku', this.productData.sku);
-    formData.append('name', this.productData.name);
-    formData.append('price', this.productData.price.toString());
-
-    // Append images to FormData
     this.selectedFiles.forEach((file) => {
       formData.append('images', file);
     });
@@ -66,22 +72,43 @@ export class AddComponent {
     return formData;
   }
 
-  addProduct(): void {
+  onSubmit(): void {
+    if (this.productForm.invalid) {
+      return; // Stop submission if the form is invalid
+    }
+
     const formData = this.prepareFormData();
 
     if (this.productId) {
-      this.productService.updateProduct(this.productId, formData).subscribe(() => {
-        alert('Product updated successfully!');
-        this.router.navigate(['/']);
-      });
+      this.productService.updateProduct(this.productId, formData).subscribe(
+        () => {
+          alert('Product updated successfully!');
+          this.router.navigate(['/']);
+        },
+        (error) => {
+          if (error.status === 400 && error.error.message === 'SKU already exists') {
+            this.skuExistError = true;
+          } else {
+            alert('An error occurred while updating the product');
+          }
+        }
+      );
     } else {
-      this.productService.addProduct(formData).subscribe(() => {
-        alert('Product added successfully!');
-        this.router.navigate(['/']);
-      });
+      this.productService.addProduct(formData).subscribe(
+        () => {
+          alert('Product added successfully!');
+          this.router.navigate(['/']);
+        },
+        (error) => {
+          if (error.status === 400 && error.error.message === 'SKU already exists') {
+            this.skuExistError = true;
+          } else {
+            alert('An error occurred while adding the product');
+          }
+        }
+      );
     }
   }
-
 
   closeModal(): void {
     this.router.navigate(['/']);
