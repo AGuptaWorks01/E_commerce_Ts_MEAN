@@ -1,45 +1,40 @@
 import { Component, inject } from '@angular/core';
 import { ProductService } from '../../service/product.service';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
+import { transformImageUrl } from '../../utils/image-url-transformer';
+import { ModalService } from '../../service/modal.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
   products: any[] = []; // hold orginal data
-  selectedProduct: any = {}
+  selectedProduct: any = {};
 
   private productService = inject(ProductService);
+  private modalService = inject(ModalService);
 
   ngOnInit(): void {
     this.loadProducts();
   }
 
   loadProducts(): void {
-    this.productService.getProducts().subscribe(data => {
-      this.products = data;
-      console.log(data);
-    })
+    this.productService.getProducts().subscribe((data) => {
+      this.products = transformImageUrl(data, environment.baseUrl);
+      console.log(this.products);
+    });
   }
-
 
   viewProduct(productId: number): void {
     this.productService.getProductById(productId).subscribe(
       (product) => {
-        console.log('Fetched product:', product);
-        this.selectedProduct = {
-          ...product,
-          images: product.images.map((img: { image_url: string; }) => ({
-            ...img,
-            image_url: `http://localhost:3000/${img.image_url.replace(/\\/g, '/')}`
-          }))
-        };
-
-        this.openModal();
+        this.selectedProduct = product;
+        this.modalService.openModal('productModal');
       },
       (error) => {
         console.error('Error fetching product:', error);
@@ -47,19 +42,7 @@ export class DashboardComponent {
     );
   }
 
-  openModal(): void {
-    const modal = document.getElementById('productModal');
-    if (modal) {
-      modal.classList.add('show');
-      modal.style.display = 'block';
-    }
-  }
-
   closeModal(): void {
-    const modal = document.getElementById('productModal');
-    if (modal) {
-      modal.classList.remove('show');
-      modal.style.display = 'none';
-    }
+    this.modalService.closeModal('productModal');
   }
 }

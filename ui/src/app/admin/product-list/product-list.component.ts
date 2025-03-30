@@ -3,6 +3,8 @@ import { ProductService } from '../../service/product.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Product } from '../../interface/product';
+import { environment } from '../../../environments/environment';
+import { transformImageUrl } from '../../utils/image-url-transformer';
 
 @Component({
   selector: 'app-product-list',
@@ -23,8 +25,8 @@ export class ProductListComponent implements OnInit {
 
   loadProducts(): void {
     this.productService.getProducts().subscribe((data) => {
-      this.products = data;
-      // console.log(data);
+      this.products = transformImageUrl(data, environment.baseUrl);
+      console.log(this.products);
     });
   }
 
@@ -37,17 +39,20 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-
   deleteProduct(productId: number): void {
     if (confirm('Are you sure you want to delete this product?')) {
-      this.productService.deleteProduct(productId).subscribe(() => {
-        this.products = this.products.filter((product) => product.id !== productId);
-        alert('Product deleted successfully!');
-      }, (error) => {
-        console.error('Error deleting product:', error);
-        alert('Failed to delete the product.');
-      });
+      this.productService.deleteProduct(productId).subscribe(
+        () => {
+          this.products = this.products.filter(
+            (product) => product.id !== productId
+          );
+          alert('Product deleted successfully!');
+        },
+        (error) => {
+          console.error('Error deleting product:', error);
+          alert('Failed to delete the product.');
+        }
+      );
     }
   }
-
 }

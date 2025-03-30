@@ -55,28 +55,15 @@ class ProductController {
     }
   }
 
-
   //  Get all products
   static async getProducts(req: Request, res: Response) {
     try {
-      const baseUrl = "http://localhost:3000/"; // Adjust this to match your server's URL
-      // Fetch products with images in a single query
       const products = await AppDataSource.manager.find(Product, {
         relations: ["images"],
       });
-
-      // Map images to full URLs for each product in a single pass
-      const mappedProducts = products.map((product) => ({
-        ...product,
-        images: product.images.map((image) => ({
-          ...image,
-          image_url: baseUrl + image.image_url, // Prepend base URL to image paths
-        })),
-      }));
-
-      res.status(200).json(mappedProducts);
+      res.status(200).json(products);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching products:", error);
       res.status(500).json({ error: "Error fetching products" });
     }
   }
@@ -102,7 +89,6 @@ class ProductController {
   }
 
   // Update product
-
   static async updateProduct(req: Request, res: Response) {
     const id = parseInt(req.params.id);
     const { sku, name, price } = req.body;
@@ -128,7 +114,9 @@ class ProductController {
         await AppDataSource.manager.remove(ProductImage, product.images);
 
         // Add new images
-        const imagePaths = (req.files as Express.Multer.File[]).map((file) => file.path);
+        const imagePaths = (req.files as Express.Multer.File[]).map(
+          (file) => file.path
+        );
 
         const newImages = imagePaths.map((path) => {
           const image = new ProductImage();
@@ -153,7 +141,6 @@ class ProductController {
       res.status(500).json({ message: "Error updating product" });
     }
   }
-
 
   //  Delete product
   static async deleteProduct(req: Request, res: Response) {
