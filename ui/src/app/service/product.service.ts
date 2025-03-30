@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 export class ProductService {
   // using http for HTTP Methods
   private http = inject(HttpClient);
+  
   // backend api
   private baseUrl = `${environment.baseUrl}/products`;
 
