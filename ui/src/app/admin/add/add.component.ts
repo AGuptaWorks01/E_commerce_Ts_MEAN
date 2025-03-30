@@ -1,6 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { ProductService } from '../../service/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../interface/product';
@@ -10,7 +15,7 @@ import { Product } from '../../interface/product';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add.component.html',
-  styleUrls: ['./add.component.css']
+  styleUrls: ['./add.component.css'],
 })
 export class AddComponent {
   private productService = inject(ProductService);
@@ -22,13 +27,14 @@ export class AddComponent {
   productForm: FormGroup;
   selectedFiles: File[] = [];
   skuExistError: boolean = false;
+  imagePreviews: string[] = [];
 
   constructor() {
     this.productForm = this.fb.group({
       sku: ['', [Validators.required, Validators.minLength(3)]],
       name: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(1)]],
-      images: [null]
+      images: [null],
     });
   }
 
@@ -47,15 +53,27 @@ export class AddComponent {
       this.productForm.patchValue({
         sku: data.sku,
         name: data.name,
-        price: data.price
+        price: data.price,
       });
     });
   }
 
   // Capture image files
   onFileSelected(event: any): void {
-    const files = event.target.files;
-    this.selectedFiles = Array.from(files);
+    const files = event.target?.files;
+    if (files) {
+      this.selectedFiles = Array.from(files); // Store files for later use
+      this.imagePreviews = []; // Reset previews
+
+      // Create previews of the selected images
+      Array.from(files).forEach((file: any) => {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.imagePreviews.push(e.target.result); // Add image preview to array
+        };
+        reader.readAsDataURL(file); // Convert file to base64 string
+      });
+    }
   }
 
   // Prepare FormData
@@ -86,7 +104,10 @@ export class AddComponent {
           this.router.navigate(['/']);
         },
         (error) => {
-          if (error.status === 400 && error.error.message === 'SKU already exists') {
+          if (
+            error.status === 400 &&
+            error.error.message === 'SKU already exists'
+          ) {
             this.skuExistError = true;
           } else {
             alert('An error occurred while updating the product');
@@ -100,7 +121,10 @@ export class AddComponent {
           this.router.navigate(['/']);
         },
         (error) => {
-          if (error.status === 400 && error.error.message === 'SKU already exists') {
+          if (
+            error.status === 400 &&
+            error.error.message === 'SKU already exists'
+          ) {
             this.skuExistError = true;
           } else {
             alert('An error occurred while adding the product');
