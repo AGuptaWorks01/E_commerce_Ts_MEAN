@@ -90,7 +90,7 @@
   id="productModal"
   class="modal fade"
   tabindex="-1"
-  aria-hidden="true"
+  aria-hidden="false"
   style="display: none"
 >
   <div class="modal-dialog modal-lg">
@@ -121,7 +121,7 @@
               <img
                 [src]="image.image_url"
                 class="d-block w-100"
-                alt="{{ selectedProduct.name }} Image"
+                alt="{{ image.name }} Image"
                 style="object-fit: cover; height: 400px"
               />
             </div>

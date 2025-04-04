@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "sourceMap": true,
     "target": "ES6",                      // Target JavaScript version
     "module": "CommonJS",                  // Use CommonJS module system
     "rootDir": "./src",                    // Source directory

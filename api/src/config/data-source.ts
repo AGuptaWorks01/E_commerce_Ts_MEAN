@@ -2,6 +2,7 @@ import { DataSource } from "typeorm";
 import { Product } from "../entity/Products";
 import { ProductImage } from "../entity/ProductImage ";
 import dotenv from "dotenv";
+import { User } from "../entity/UserAuth";
 
 dotenv.config();
 
@@ -13,11 +14,14 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   synchronize: true, // Automatically creates tables based on entities
-  logging: true,
-  ssl: {
-    rejectUnauthorized: false, // Allowing self-signed certificates
-  },
-  entities: [Product, ProductImage],
+  logging: false,
+  // ssl: {
+  //   rejectUnauthorized: false, // Allowing self-signed certificates
+  // },
+  entities: [Product, ProductImage, User],
   migrations: [],
   subscribers: [],
 });
+
+
+

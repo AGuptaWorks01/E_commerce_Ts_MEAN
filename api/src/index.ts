@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import productRoutes from "../src/routes/Product";
 import { AppDataSource } from "./config/data-source";
+import Authrouter from "./routes/AuthRote";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use("/api/uploads", express.static("uploads"));
 
 app.use(
@@ -29,6 +31,9 @@ app.use(
   },
   productRoutes
 );
+
+// User Auth 
+app.use("/api/auth", Authrouter)
 
 AppDataSource.initialize()
   .then(() => {

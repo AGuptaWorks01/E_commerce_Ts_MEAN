@@ -3,6 +3,8 @@ import { AppDataSource } from "../config/data-source";
 import { Product } from "../entity/Products";
 import { ProductImage } from "../entity/ProductImage ";
 import { plainToClass } from "class-transformer";
+import path from "path";
+import fs from 'fs'
 
 class ProductController {
   // Create Product
@@ -18,6 +20,8 @@ class ProductController {
       const existingProduct = await AppDataSource.manager.findOne(Product, {
         where: { sku },
       });
+      // console.log(existingProduct);
+
       if (existingProduct) {
         return res.status(409).json({ error: "SKU already exists" });
       }
@@ -27,24 +31,31 @@ class ProductController {
       product.name = name;
       product.price = parseFloat(price);
 
-      // Handle image uploads
-      const imagePaths = req.files
-        ? (req.files as Express.Multer.File[]).map((file) => file.path)
-        : [];
+      // console.log("product aya", product);
 
-      const imageEntities = imagePaths.map((path) => {
+      // Handle image uploads
+      const imagePaths = req.files ? (req.files as Express.Multer.File[]) : [];
+      // .map((file) => file.filename)       : [];
+      // console.log("req.files aya", req.files);
+      // console.log("imagePaths aya", imagePaths);
+
+      const imageEntities = imagePaths.map((name) => {
         const image = new ProductImage();
-        image.image_url = path;
-        image.product = product;
+        image.image_url = `/uploads/${name.filename}`;
+        console.log("path save ", image.image_url);
+        image.product = product
         return image;
       });
+      // console.log("image enitites is here", imageEntities);
+
 
       product.images = imageEntities;
-
       await AppDataSource.manager.save(product);
 
       // Convert to plain object to avoid circular reference
       const plainProduct = plainToClass(Product, product);
+      // console.log("plainProduct", plainProduct);
+
       res.status(201).json({
         message: "Product created successfully",
         product: plainProduct,
@@ -58,6 +69,7 @@ class ProductController {
   //  Get all products
   static async getProducts(req: Request, res: Response) {
     try {
+      debugger;
       const products = await AppDataSource.manager.find(Product, {
         relations: ["images"],
       });
@@ -70,8 +82,8 @@ class ProductController {
 
   //  Get product by ID
   static async getProductById(req: Request, res: Response) {
-    const id = parseInt(req.params.id);
     try {
+      const id = parseInt(req.params.id);
       const product = await AppDataSource.manager.findOne(Product, {
         where: { id },
         relations: ["images"],
@@ -88,16 +100,20 @@ class ProductController {
     }
   }
 
+
   // Update product
   static async updateProduct(req: Request, res: Response) {
-    const id = parseInt(req.params.id);
-    const { sku, name, price } = req.body;
 
     try {
+      const id = parseInt(req.params.id);
+      const { sku, name, price } = req.body;
+      const files = req.files as Express.Multer.File[];
+
       const product = await AppDataSource.manager.findOne(Product, {
         where: { id },
         relations: ["images"],
       });
+      // console.log(product);
 
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
@@ -107,34 +123,58 @@ class ProductController {
       product.sku = sku || product.sku;
       product.name = name || product.name;
       product.price = parseFloat(price) || product.price;
+      // console.log(product.sku);
 
       // Handle image updates
-      if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+      if (files && files.length > 0) {
+        console.log("New images uploaded. Deleting old images...");
+
+        for (const oldImage of product.images) {
+          // const oldImagePath = path.join(__dirname, "..", oldImage.image_url);
+          const oldImagePath = path.join(process.cwd(), "uploads", path.basename(oldImage.image_url))
+
+          console.log("Checking file path:", oldImagePath);
+
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlink(oldImagePath, (err) => {
+              if (err) {
+                console.error("Error deleting file:", err);
+              } else {
+                console.log("Deleted old image:", oldImagePath);
+              }
+            });
+          } else {
+            console.warn("File not found:", oldImagePath);
+          }
+        }
+
         // Remove old images
         await AppDataSource.manager.remove(ProductImage, product.images);
 
         // Add new images
-        const imagePaths = (req.files as Express.Multer.File[]).map(
-          (file) => file.path
-        );
+        const imagePaths = (req.files as Express.Multer.File[])
+        // .map((file) => file.filename);
+        console.log("ImagePaths is for update", imagePaths);
 
-        const newImages = imagePaths.map((path) => {
+        const newImages = imagePaths.map((file) => {
           const image = new ProductImage();
-          image.image_url = path;
+          image.image_url = `/uploads/${file.filename}`;
           image.product = product;
+          // console.log("image", image);
           return image;
         });
+        console.log(newImages);
 
         product.images = newImages;
       }
 
       await AppDataSource.manager.save(product);
 
-      const plainProduct = plainToClass(Product, product);
+      // const plainProduct = plainToClass(Product, product);
 
       res.status(200).json({
         message: "Product updated successfully",
-        product: plainProduct,
+        // product: plainProduct,
       });
     } catch (error) {
       console.error("Error updating product:", error);
@@ -142,11 +182,12 @@ class ProductController {
     }
   }
 
-  //  Delete product
+
+  //  Delete product  
   static async deleteProduct(req: Request, res: Response) {
-    const id = parseInt(req.params.id);
 
     try {
+      const id = parseInt(req.params.id);
       const product = await AppDataSource.manager.findOne(Product, {
         where: { id },
         relations: ["images"],
@@ -156,7 +197,30 @@ class ProductController {
         return res.status(404).json({ message: "Product not found" });
       }
 
-      await AppDataSource.manager.remove(ProductImage, product.images);
+      for (const image of product.images) {
+        // const imagePath = path.join(__dirname, "..", image.image_url)
+
+
+        const oldImagePath = path.join(process.cwd(), "uploads", path.basename(image.image_url))
+        console.log("Image path is ", oldImagePath);
+
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlink(oldImagePath, (err) => {
+            if (err) {
+              console.error("❌ Error deleting file:", err);
+            } else {
+              console.log("✅ Deleted image:", oldImagePath);
+            }
+          })
+        } else {
+          console.warn("⚠️ File not found:", oldImagePath);
+        }
+      }
+
+      for (const image of product.images) {
+        await AppDataSource.manager.delete(ProductImage, { id: image.id });
+      }
+
       await AppDataSource.manager.remove(product);
 
       res.status(200).json({ message: "Product deleted successfully" });
