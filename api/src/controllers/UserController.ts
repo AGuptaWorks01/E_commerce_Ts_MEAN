@@ -3,7 +3,9 @@ import { User } from "../entity/UserAuth";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { AppDataSource } from "../config/data-source";
+import dotenv from "dotenv"
 
+dotenv.config();
 export class UserAuth {
 
     static async userRegister(req: Request, res: Response) {
@@ -49,7 +51,9 @@ export class UserAuth {
                 return res.status(401).json({ error: "Invalid credentials" });
             }
 
-            const token = jwt.sign({ userId: user.id, email: user.email }, "Secret_Key", { expiresIn: '1h' })
+
+            const token = jwt.sign({ userId: user.id, email: user.email }, process.env.SECRET_KEY as string
+                , { expiresIn: '1h' })
             return res.status(200).json({ message: "Login Success", token });
 
         } catch (error) {

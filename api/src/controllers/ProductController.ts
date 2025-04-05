@@ -10,7 +10,7 @@ class ProductController {
   // Create Product
   static async createProduct(req: Request, res: Response) {
     try {
-      const { sku, name, price } = req.body;
+      const { sku, name, price, description } = req.body;
 
       if (!sku || !name || !price) {
         return res.status(400).json({ error: "All fields are required" });
@@ -30,6 +30,7 @@ class ProductController {
       product.sku = sku;
       product.name = name;
       product.price = parseFloat(price);
+      product.description = description;
 
       // console.log("product aya", product);
 
@@ -42,7 +43,7 @@ class ProductController {
       const imageEntities = imagePaths.map((name) => {
         const image = new ProductImage();
         image.image_url = `/uploads/${name.filename}`;
-        console.log("path save ", image.image_url);
+        // console.log("path save ", image.image_url);
         image.product = product
         return image;
       });
@@ -106,7 +107,7 @@ class ProductController {
 
     try {
       const id = parseInt(req.params.id);
-      const { sku, name, price } = req.body;
+      const { sku, name, price, description } = req.body;
       const files = req.files as Express.Multer.File[];
 
       const product = await AppDataSource.manager.findOne(Product, {
@@ -123,6 +124,7 @@ class ProductController {
       product.sku = sku || product.sku;
       product.name = name || product.name;
       product.price = parseFloat(price) || product.price;
+      product.description = description || product.description;
       // console.log(product.sku);
 
       // Handle image updates
@@ -207,13 +209,13 @@ class ProductController {
         if (fs.existsSync(oldImagePath)) {
           fs.unlink(oldImagePath, (err) => {
             if (err) {
-              console.error("❌ Error deleting file:", err);
+              console.error("Error deleting file:", err);
             } else {
-              console.log("✅ Deleted image:", oldImagePath);
+              console.log("Deleted image:", oldImagePath);
             }
           })
         } else {
-          console.warn("⚠️ File not found:", oldImagePath);
+          console.warn(" File not found:", oldImagePath);
         }
       }
 

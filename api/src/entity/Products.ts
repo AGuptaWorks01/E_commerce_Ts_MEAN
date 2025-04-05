@@ -16,6 +16,9 @@ export class Product {
   @Column({ type: "decimal", precision: 10, scale: 2 })
   price!: number;
 
+  @Column({ type: "varchar", length: 500 })
+  description!: string;
+
   @Exclude() // Prevent circular reference
   @OneToMany(() => ProductImage, (image) => image.product, { cascade: true })
   images!: ProductImage[];

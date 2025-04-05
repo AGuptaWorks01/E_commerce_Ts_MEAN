@@ -1,6 +1,7 @@
 import express from "express";
 import ProductController from "../controllers/ProductController"
 import upload from "../middleware/upload";
+import { authMiddleWare } from "../middleware/verifyToken";
 
 const router = express.Router();
 

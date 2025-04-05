@@ -3,7 +3,7 @@ import { UserAuth } from "../controllers/UserController";
 
 const router = express.Router()
 
-router.post('/reg', async (req, res) => {
+router.post('/register', async (req, res) => {
     await UserAuth.userRegister(req, res)
 })
 
