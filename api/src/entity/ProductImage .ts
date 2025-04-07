@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Product } from "./Products";
+import { Product } from "./Product";
 import { Exclude } from "class-transformer";
 
 @Entity()
@@ -9,9 +9,9 @@ export class ProductImage {
     id!: number;
 
     @Column()
-    image_url!: string;
+    url!: string;
 
-    @Exclude()  
+    @Exclude()
     @ManyToOne(() => Product, (product) => product.images, { onDelete: "CASCADE" })
     product!: Product
 }

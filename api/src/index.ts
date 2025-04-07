@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import productRoutes from "../src/routes/Product";
 import { AppDataSource } from "./config/data-source";
-import Authrouter from "./routes/AuthRote";
+import Authrouter from "./routes/Users";
 
 dotenv.config();
 

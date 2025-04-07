@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../config/data-source";
-import { Product } from "../entity/Products";
+import { Product } from "../entity/Product";
 import { ProductImage } from "../entity/ProductImage ";
 import { plainToClass } from "class-transformer";
 import path from "path";
@@ -42,7 +42,7 @@ class ProductController {
 
       const imageEntities = imagePaths.map((name) => {
         const image = new ProductImage();
-        image.image_url = `/uploads/${name.filename}`;
+        image.url = `/uploads/${name.filename}`;
         // console.log("path save ", image.image_url);
         image.product = product
         return image;
@@ -133,7 +133,7 @@ class ProductController {
 
         for (const oldImage of product.images) {
           // const oldImagePath = path.join(__dirname, "..", oldImage.image_url);
-          const oldImagePath = path.join(process.cwd(), "uploads", path.basename(oldImage.image_url))
+          const oldImagePath = path.join(process.cwd(), "uploads", path.basename(oldImage.url))
 
           console.log("Checking file path:", oldImagePath);
 
@@ -160,7 +160,7 @@ class ProductController {
 
         const newImages = imagePaths.map((file) => {
           const image = new ProductImage();
-          image.image_url = `/uploads/${file.filename}`;
+          image.url = `/uploads/${file.filename}`;
           image.product = product;
           // console.log("image", image);
           return image;
@@ -203,7 +203,7 @@ class ProductController {
         // const imagePath = path.join(__dirname, "..", image.image_url)
 
 
-        const oldImagePath = path.join(process.cwd(), "uploads", path.basename(image.image_url))
+        const oldImagePath = path.join(process.cwd(), "uploads", path.basename(image.url))
         console.log("Image path is ", oldImagePath);
 
         if (fs.existsSync(oldImagePath)) {

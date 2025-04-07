@@ -1,5 +1,5 @@
 import express from "express";
-import ProductController from "../controllers/ProductController"
+import ProductController from "../controllers/Product.Controller"
 import upload from "../middleware/upload";
 import { authMiddleWare } from "../middleware/verifyToken";
 
