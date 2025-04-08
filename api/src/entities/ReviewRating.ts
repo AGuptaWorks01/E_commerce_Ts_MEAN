@@ -7,24 +7,19 @@ export class ReviewRating {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @ManyToOne(() => User, (user) => user.review)
-    user!: User;
-
     @ManyToOne(() => Product, (product) => product.review)
     product!: Product;
 
-    @Column()
+    @ManyToOne(() => User, (user) => user.review)
+    user!: User;
+
+    @Column('float')
     rating!: number;
 
-    @Column({
-        type: "text"
-    })
-    review!: string;
+    @Column()
+    comment!: string;
 
     @CreateDateColumn()
     createdAt!: Date;
-
-    @UpdateDateColumn()
-    updatedAt!: Date;
 
 }

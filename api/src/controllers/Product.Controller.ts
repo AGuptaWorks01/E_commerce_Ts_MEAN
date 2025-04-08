@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../config/data-source";
-import { Product } from "../entity/Product";
-import { ProductImage } from "../entity/ProductImage ";
+import { Product } from "../entities/Product";
+import { ProductImage } from "../entities/ProductImage ";
 import { plainToClass } from "class-transformer";
 import path from "path";
 import fs from 'fs'

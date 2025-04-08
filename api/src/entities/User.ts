@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 import { Order } from "./Order"
 import { Cart } from "./Cart"
 import { ReviewRating } from './ReviewRating';
@@ -21,8 +21,8 @@ export class User {
     @Column({ unique: true })
     email!: string;
 
-    @Column({ type: 'int', default: 1 })
-    isActive!: number;
+    // @Column({ type: 'int', default: 1 })
+    // isActive!: number;
 
     @Column()
     password!: string;
@@ -34,27 +34,21 @@ export class User {
     })
     role!: Role;
 
-    @OneToMany(() => Order, (order) => order.user)
-    orders!: Order[];
-
     @OneToMany(() => Cart, (cart) => cart.user)
     carts!: Cart[];
 
-    @Column({
-        type: "timestamp",
-        default: () => "CURRENT_TIMESTAMP"
-    })
+    @OneToMany(() => Order, (order) => order.user)
+    orders!: Order[];
+
+    @CreateDateColumn()
     createdAt!: Date;
 
-    @UpdateDateColumn({
-        type: "timestamp",
-        default: () => "CURRENT_TIMESTAMP"
-    })
+    @UpdateDateColumn()
     updatedAt!: Date;
 
     @OneToMany(() => ReviewRating, (review) => review.user)
     review!: ReviewRating[];
 
-    @OneToMany(() => ShipingAddress, (shipingAddress) => shipingAddress.user)
-    shipingAddress!: ShipingAddress;
+    @OneToMany(() => ShipingAddress, (address) => address.user)
+    addresses!: ShipingAddress[];
 }

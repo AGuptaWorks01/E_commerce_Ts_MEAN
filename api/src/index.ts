@@ -1,9 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import productRoutes from "../src/routes/Product";
+import productRoutes from "./routes/Product.Route";
 import { AppDataSource } from "./config/data-source";
-import Authrouter from "./routes/Users";
+import Authrouter from "./routes/Users.Route";
 
 dotenv.config();
 

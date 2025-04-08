@@ -7,10 +7,10 @@ export class CartItem {
     @PrimaryGeneratedColumn()
     id!: Number
 
-    @ManyToMany(() => Cart, (cart) => cart.items, { cascade: true })
+    @ManyToMany(() => Cart, (cart) => cart.items, { onDelete: "CASCADE" })
     cart!: Cart
 
-    @ManyToOne(() => Product, (product) => product.cartItem, { cascade: true })
+    @ManyToOne(() => Product, (product) => product.cartItem)
     product!: Product
 
     @Column({

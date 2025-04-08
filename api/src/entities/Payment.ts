@@ -6,16 +6,16 @@ export class Payment {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()
-    PaymentMethod!: string;
-
-    @Column("decimal", { precision: 10, scale: 2 })
-    amount!: number;
-
-    @Column()
-    status!: string;
-
     @OneToOne(() => Order, (order) => order.payment)
     order!: Order
+
+    @Column()
+    PaymentMethod!: string;
+    
+    @Column()
+    status!: string;
+    
+    @Column("decimal", { precision: 10, scale: 2 })
+    amount!: number;
 
 }

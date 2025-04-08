@@ -11,7 +11,6 @@ export class ProductImage {
     @Column()
     url!: string;
 
-    @Exclude()
     @ManyToOne(() => Product, (product) => product.images, { onDelete: "CASCADE" })
     product!: Product
 }

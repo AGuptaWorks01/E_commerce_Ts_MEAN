@@ -3,14 +3,12 @@ import { Category } from "./Category";
 import { ProductImage } from "./ProductImage ";
 import { ReviewRating } from "./ReviewRating";
 import { CartItem } from "./CartItem";
+import { OrderItem } from "./OrderItem";
 
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
   id!: number;
-
-  @Column({ nullable: false, unique: true })
-  sku!: string;
 
   @Column({ nullable: false })
   name!: string;
@@ -21,15 +19,19 @@ export class Product {
   })
   description!: string;
 
-
+  @Column("decimal", { nullable: false })
+  price!: number;
+  
   @Column({
     type: "int",
     default: 0
   })
   stock!: number;
 
-  @Column("decimal", { nullable: false })
-  price!: number;
+  @Column({ nullable: false, unique: true })
+  sku!: string;
+
+
 
   @ManyToOne(() => Category, (category) => category.products, { onDelete: "CASCADE" })
   category!: Category;
@@ -41,9 +43,11 @@ export class Product {
   @OneToMany(() => ReviewRating, (review) => review.product)
   review!: ReviewRating[];
 
-
   @OneToMany(() => CartItem, (cartitem) => cartitem.product)
-  cartItem!: CartItem[]
+  cartItem!: CartItem[];
+
+  @OneToMany(() => OrderItem, (item) => item.product)
+  orderItems!: OrderItem[];
 
 
 }
