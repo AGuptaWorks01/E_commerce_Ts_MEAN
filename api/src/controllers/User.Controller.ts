@@ -50,7 +50,9 @@ export class UserAuth {
             const { password: _, ...userWithoutPassword } = user
             res.status(201).json({
                 message: "User created SuccessFully",
-                // User: userWithoutPassword,
+                User: userWithoutPassword,
+
+                user
             });
         } catch (error) {
             console.error("Error creating product:", error);
@@ -75,11 +77,11 @@ export class UserAuth {
                 return res.status(401).json({ message: "Invalid credentials" });
             }
 
-
             const token = jwt.sign(
                 { userId: user.id, email: user.email, role: user.role },
                 process.env.SECRET_KEY as string
                 , { expiresIn: '1h' })
+            // console.log("object,",user.role);
 
             const { password: _, ...userWithoutPassword } = user
             return res.status(200).json({ message: "Login Success", token, userWithoutPassword });
@@ -89,4 +91,34 @@ export class UserAuth {
             res.status(500).json({ error: "Error While Login" });
         }
     }
+
+    //   static async getProducts(req: Request, res: Response) {
+    //     try {
+    //       debugger;
+    //       const products = await AppDataSource.manager.find(Product, {
+    //         relations: ["images"],
+    //       });
+    //       res.status(200).json(products);
+    //     } catch (error) {
+    //       console.error("Error fetching products:", error);
+    //       res.status(500).json({ error: "Error fetching products" });
+    //     }
+    //   }
+
+    static async getAllUser(req: Request, res: Response) {
+        try {
+            const userRepo = AppDataSource.getRepository(User)
+            const users = await userRepo.find({
+                select: ["id", "name", "email", "role", "createdAt", "updatedAt"],
+            });
+            res.status(200).json({
+                message: "All users fetched successfully",
+                users,
+            });
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
 }

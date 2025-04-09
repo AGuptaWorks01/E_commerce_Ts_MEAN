@@ -2,8 +2,15 @@ import dotenv from 'dotenv';
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
+interface JwtPayloadWithUser extends JwtPayload {
+    id: number;
+    email: string;
+    role: string;
+}
+
 export interface CustomRequest extends Request {
     token: string | JwtPayload;
+    user: JwtPayloadWithUser;
 }
 
 dotenv.config()
@@ -17,11 +24,26 @@ export const authMiddleWare = (req: Request, res: Response, next: NextFunction) 
             return
         }
 
-        const decoded = jwt.verify(token, SECRET_KEY) as string
-        (req as CustomRequest).token = decoded;
+        const decoded = jwt.verify(token, SECRET_KEY) as JwtPayloadWithUser;
+
+        (req as CustomRequest).user = decoded;
         next()
-    } catch (err: any) {
+    } catch (err) {
         res.status(403).json({ message: 'Invalid token' })
+    }
+}
+
+export const authorizeRoles = (...allowedRoles: string[]) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const user = (req as CustomRequest).user;
+        console.log("User role:", user.role);
+
+        if (!user) res.status(401).json({ message: 'Unauthorized' })
+
+        if (!allowedRoles.includes(user.role)) {
+            res.status(403).json({ message: "Access denied: Insufficient role" })
+        }
+        next()
     }
 }
 
