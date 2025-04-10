@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./User";
-import { OrderItem } from "./OrderItem";
-import { Payment } from "./Payment";
-import { ShipingAddress } from "./ShipingAddress";
+import { User } from "./User.Entitie";
+import { OrderItem } from "./OrderItem.Entitie";
+import { Payment } from "./Payment.Entitie";
+import { ShipingAddress } from "./ShipingAddress.Entitie";
 
 export enum Status {
     PENDING = "Placed",

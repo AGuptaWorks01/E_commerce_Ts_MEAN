@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
-import { Category } from "./Category";
-import { ProductImage } from "./ProductImage ";
-import { ReviewRating } from "./ReviewRating";
-import { CartItem } from "./CartItem";
-import { OrderItem } from "./OrderItem";
+import { Category } from "./Category.Entitie";
+import { ProductImage } from "./ProductImage.Entitie";
+import { ReviewRating } from "./ReviewRating.Entitie";
+import { CartItem } from "./CartItem.Entitie";
+import { OrderItem } from "./OrderItem.Entitie";
 
 @Entity()
 export class Product {
@@ -21,7 +21,7 @@ export class Product {
 
   @Column("decimal", { nullable: false })
   price!: number;
-  
+
   @Column({
     type: "int",
     default: 0

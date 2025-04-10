@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from "typeorm";
-import { User } from "./User";
-import { Order } from "./Order";
+import { User } from "./User.Entitie";
+import { Order } from "./Order.Entitie";
 
 @Entity()
 export class ShipingAddress {
@@ -15,7 +15,7 @@ export class ShipingAddress {
 
     @Column({ nullable: true })
     addressLine2!: string;
-    
+
     @Column()
     city!: string;
 

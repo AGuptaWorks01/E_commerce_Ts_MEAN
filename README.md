@@ -3,6 +3,7 @@
 This project is an Admin Panel for managing products in an E-commerce platform. It allows administrators to perform CRUD (Create, Read, Update, Delete) operations on product details such as SKU, Name, Price, and Images.
  --- 
 ![ER Diagram](./ECom-ER.png)
+![ER Diagram](./Module.png)
 ---
 > #Technologies Used
 Frontend: Angular (17/18), TypeScript

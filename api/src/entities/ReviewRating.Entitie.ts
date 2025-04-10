@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, UpdateDateColumn, CreateDateColumn } from 'typeorm';
-import { User } from './User';
-import { Product } from './Product'
+import { User } from './User.Entitie';
+import { Product } from './Product.Entitie'
 
 @Entity()
 export class ReviewRating {

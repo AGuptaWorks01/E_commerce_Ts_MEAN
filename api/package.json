@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@types/compression": "^1.7.5",
     "@types/cors": "^2.8.17",
     "@types/node": "^22.13.13",
     "nodemon": "^3.1.9",
@@ -7,10 +8,10 @@
     "typescript": "^5.8.2"
   },
   "scripts": {
-    "start": "node src/index.ts",
+    "start": "node dist/index.ts",
     "build": "tsc",
-    "dev": "ts-node src/index.ts",
-    "dev:watch": "nodemon --inspect-brk --watch src -e ts --exec \"ts-node src/index.ts\""
+    "dev": "ts-node index.ts",
+    "dev:watch": "nodemon --watch src -e ts --exec \"ts-node index.ts\""
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -20,6 +21,7 @@
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "class-transformer": "^0.5.1",
+    "compression": "^1.8.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, UpdateDateColumn, CreateDateColumn } from 'typeorm';
-import { Order } from "./Order"
-import { Cart } from "./Cart"
-import { ReviewRating } from './ReviewRating';
-import { ShipingAddress } from './ShipingAddress';
+import { Order } from "./Order.Entitie"
+import { Cart } from "./Cart.Entitie"
+import { ReviewRating } from './ReviewRating.Entitie';
+import { ShipingAddress } from './ShipingAddress.Entitie';
 
 export enum Role {
     USER = "user",

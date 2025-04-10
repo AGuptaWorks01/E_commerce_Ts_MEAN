@@ -1,16 +1,16 @@
 import { DataSource } from "typeorm";
-import { Product } from "../entities/Product";
-import { ProductImage } from "../entities/ProductImage ";
+import { Product } from "../entities/Product.Entitie";
+import { ProductImage } from "../entities/ProductImage.Entitie";
 import dotenv from "dotenv";
-import { User } from "../entities/User";
-import { Cart } from "../entities/Cart";
-import { CartItem } from "../entities/CartItem";
-import { Category } from "../entities/Category";
-import { Payment } from "../entities/Payment";
-import { ShipingAddress } from "../entities/ShipingAddress";
-import { ReviewRating } from "../entities/ReviewRating";
-import { Order } from "../entities/Order";
-import { OrderItem } from "../entities/OrderItem";
+import { User } from "../entities/User.Entitie";
+import { Cart } from "../entities/Cart.Entitie";
+import { CartItem } from "../entities/CartItem.Entitie";
+import { Category } from "../entities/Category.Entitie";
+import { Payment } from "../entities/Payment.Entitie";
+import { ShipingAddress } from "../entities/ShipingAddress.Entitie";
+import { ReviewRating } from "../entities/ReviewRating.Entitie";
+import { Order } from "../entities/Order.Entitie";
+import { OrderItem } from "../entities/OrderItem.Entitie";
 
 dotenv.config();
 

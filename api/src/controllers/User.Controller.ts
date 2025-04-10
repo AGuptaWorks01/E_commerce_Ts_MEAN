@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { Role, User } from "../entities/User";
+import { NextFunction, Request, Response } from "express";
+import { Role, User } from "../entities/User.Entitie";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { AppDataSource } from "../config/data-source";
@@ -8,7 +8,7 @@ import dotenv from "dotenv"
 dotenv.config();
 export class UserAuth {
 
-    static async userRegister(req: Request, res: Response) {
+    static async userRegister(req: Request, res: Response, next: NextFunction) {
         try {
             const { name, email, password, role } = req.body;
             if (!name || !email || !password) {
@@ -61,7 +61,7 @@ export class UserAuth {
     }
 
 
-    static async UserLogin(req: Request, res: Response) {
+    static async UserLogin(req: Request, res: Response, next: NextFunction) {
         try {
             const { email, password } = req.body;
             // Validate input
@@ -105,7 +105,7 @@ export class UserAuth {
     //     }
     //   }
 
-    static async getAllUser(req: Request, res: Response) {
+    static async getAllUser(req: Request, res: Response, next: NextFunction) {
         try {
             const userRepo = AppDataSource.getRepository(User)
             const users = await userRepo.find({

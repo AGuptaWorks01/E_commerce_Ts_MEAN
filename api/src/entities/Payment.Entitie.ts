@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
-import { Order } from "./Order";
+import { Order } from "./Order.Entitie";
 
 @Entity()
 export class Payment {
@@ -11,10 +11,10 @@ export class Payment {
 
     @Column()
     PaymentMethod!: string;
-    
+
     @Column()
     status!: string;
-    
+
     @Column("decimal", { precision: 10, scale: 2 })
     amount!: number;
 

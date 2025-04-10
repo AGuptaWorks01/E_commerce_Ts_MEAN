@@ -1,12 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { Product } from "./Product";
-import { Order } from "./Order";
+import { Product } from "./Product.Entitie";
+import { Order } from "./Order.Entitie";
 
 @Entity()
 export class OrderItem {
     @PrimaryGeneratedColumn()
     id!: number;
-    
+
     @ManyToOne(() => Order, (order) => order.items, { onDelete: "CASCADE" })
     order!: Order;
 

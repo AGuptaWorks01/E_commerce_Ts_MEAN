@@ -3,7 +3,7 @@
     "sourceMap": true,
     "target": "ES6",                      // Target JavaScript version
     "module": "CommonJS",                  // Use CommonJS module system
-    "rootDir": "./src",                    // Source directory
+    // "rootDir": "./src",                    // Source directory
     "outDir": "./dist",                    // Output directory for compiled JS
     "esModuleInterop": true,               // Allow import/export interoperability
     "strict": true,                        // Enable strict type checking
@@ -12,6 +12,6 @@
     "experimentalDecorators": true,        // Enable decorators
     "emitDecoratorMetadata": true,         // Include metadata for decorators
   },
-  "include": ["src/**/*"],                      // Include src folder
+  "include": ["src/**/*", "index.ts"],     // Include src folder
   "exclude": ["node_modules"]              // Exclude node_modules
 }
