@@ -1,13 +1,13 @@
 import express from "express";
-import ProductController from "../controllers/Product.Controller"
 import upload from "../middlewares/upload";
-import { authMiddleWare } from "../middlewares/verifyToken";
+import { ProductController } from "../controllers/Product.Controller"
+import { authMiddleWare, authorizeRoles } from "../middlewares/verifyToken";
 
 const router = express.Router();
 
-router.post("/", upload.array("images", 5), async (req, res) => {
-    await ProductController.createProduct(req, res);
-});
+// router.post("/", upload.array("images", 5), async (req, res, next) => {
+//     await ProductController.createProduct(req, res, next);
+// });
 
 router.get("/", async (req, res) => {
     await ProductController.getProducts(req, res);
@@ -24,5 +24,10 @@ router.put("/:id", upload.array("images", 5), async (req, res) => {
 router.delete("/:id", async (req, res) => {
     await ProductController.deleteProduct(req, res);
 });
+
+
+router.use('/add', authMiddleWare, authorizeRoles('admin', 'seller'))
+router.post('/add', ProductController.createProduct)
+
 
 export default router;

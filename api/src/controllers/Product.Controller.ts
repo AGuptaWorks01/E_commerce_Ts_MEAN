@@ -1,48 +1,71 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, response, Response } from "express";
 import { AppDataSource } from "../config/data-source";
 import { Product } from "../entities/Product.Entitie";
 import { ProductImage } from "../entities/ProductImage.Entitie";
 import { plainToClass } from "class-transformer";
 import path from "path";
 import fs from 'fs'
+import { CustomError } from "../responses/CustomError";
+import { SuccessResponse } from "../responses/SuccessResponse";
 
-class ProductController {
+export class ProductController {
   // Create Product
-  static async createProduct(req: Request, res: Response) {
+  static async createProduct(req: Request, res: Response, next: NextFunction) {
     try {
-      const { sku, name, price, description } = req.body;
+      const { name, description, price, stock, sku, categoryId } = req.body;
+      // console.log(req.body);
 
-      if (!sku || !name || !price) {
-        return res.status(400).json({ error: "All fields are required" });
+
+      if (!name || !description || !price || !stock || !sku || !categoryId) {
+        // res.status(400).json({ error: "All fields are required" });
+        throw new CustomError("All fields are required", 400)
       }
 
-      // Check for duplicate SKU
-      const existingProduct = await AppDataSource.manager.findOne(Product, {
-        where: { sku },
-      });
+      const existproduct = AppDataSource.getRepository(Product)
+      const existingProduct = await existproduct.findOne({ where: { sku } })
       // console.log(existingProduct);
 
       if (existingProduct) {
-        return res.status(409).json({ error: "SKU already exists" });
+        // res.status(409).json({ error: "SKU already exists" });
+        throw new CustomError("SKU already exists", 409)
       }
 
-      const product = new Product();
-      product.sku = sku;
-      product.name = name;
-      product.price = parseFloat(price);
-      product.description = description;
+      // const product = new Product();
+      // product.name = name;
+      // product.description = description;
+      // product.price = parseFloat(price);
+      // product.stock = parseInt(stock);
+      // product.sku = sku;
+      // product.categoryId = categoryId;
+
+      const product = existproduct.create({
+        name,
+        description,
+        price: parseFloat(price),
+        stock: parseFloat(stock),
+        sku,
+        categoryId,
+      })
+
+
+      //  const user = userRepo.create({
+      //             name,
+      //             email,
+      //             password: hashPassword,
+      //             role: role || Role.USER,
+      //         })
 
       // console.log("product aya", product);
 
       // Handle image uploads
-      const imagePaths = req.files ? (req.files as Express.Multer.File[]) : [];
+      const files = req.files ? (req.files as Express.Multer.File[]) : [];
       // .map((file) => file.filename)       : [];
       // console.log("req.files aya", req.files);
       // console.log("imagePaths aya", imagePaths);
 
-      const imageEntities = imagePaths.map((name) => {
+      const imageEntities = files.map((file) => {
         const image = new ProductImage();
-        image.url = `/uploads/${name.filename}`;
+        image.url = `/uploads/${file.filename}`;
         // console.log("path save ", image.image_url);
         image.product = product
         return image;
@@ -57,13 +80,16 @@ class ProductController {
       const plainProduct = plainToClass(Product, product);
       // console.log("plainProduct", plainProduct);
 
-      res.status(201).json({
-        message: "Product created successfully",
-        product: plainProduct,
-      });
+      // res.status(201).json({
+      //   message: "Product created successfully",
+      //   product: plainProduct,
+      // })
+      const Response = new SuccessResponse("Product created successfully", plainProduct);
+      res.status(201).json(Response);
     } catch (error) {
-      console.error("Error creating product:", error);
-      res.status(500).json({ error: "Error creating product" });
+      // console.error("Error creating product:", error);
+      // res.status(500).json({ error: "Error creating product" });
+      next(error)
     }
   }
 
@@ -232,5 +258,3 @@ class ProductController {
     }
   }
 }
-
-export default ProductController;

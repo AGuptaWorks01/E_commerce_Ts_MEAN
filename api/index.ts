@@ -1,3 +1,4 @@
+// ================= (Main Entry Point) =================
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -6,7 +7,8 @@ import { AppDataSource } from "./src/config/data-source";
 
 const PORT = process.env.PORT || 3000;
 
-// Ping DB every X seconds to keep it alive
+
+// Keep DB Connection Alive by periodic ping
 function keepDatabaseAlive() {
   setInterval(async () => {
     try {
@@ -19,8 +21,7 @@ function keepDatabaseAlive() {
 }
 
 
-
-// DB + Server Boot
+// DB Connection + Server Bootstrapping
 const startServer = async () => {
   try {
     await AppDataSource.initialize();
@@ -40,12 +41,3 @@ const startServer = async () => {
 }
 
 startServer()
-
-// AppDataSource.initialize()
-//   .then(() => {
-//     console.log("Database connected");
-//     app.listen(PORT, () =>
-//       console.log(`Server running on port http://localhost:${PORT}`)
-//     );
-//   })
-//   .catch((error) => console.log(error));

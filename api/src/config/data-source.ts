@@ -22,7 +22,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   synchronize: true, // Automatically creates tables based on entities
-  logging: false,
+  logging: true,
   // ssl: {
   //   rejectUnauthorized: false, // Allowing self-signed certificates
   // },

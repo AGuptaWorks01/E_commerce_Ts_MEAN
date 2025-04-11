@@ -1,16 +1,19 @@
 import { NextFunction, Request, Response } from "express";
-import { Role, User } from "../entities/User.Entitie";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { AppDataSource } from "../config/data-source";
-import dotenv from "dotenv"
 
+import dotenv from "dotenv"
 dotenv.config();
+
+import { Role, User } from "../entities/User.Entitie";
+import { AppDataSource } from "../config/data-source";
+
 export class UserAuth {
 
-    static async userRegister(req: Request, res: Response, next: NextFunction) {
+    static async userRegister(req: Request, res: Response) {
         try {
             const { name, email, password, role } = req.body;
+
             if (!name || !email || !password) {
                 return res.status(400).json({ message: "All fields are required" });
             }
@@ -77,6 +80,7 @@ export class UserAuth {
                 return res.status(401).json({ message: "Invalid credentials" });
             }
 
+            // Authentication method
             const token = jwt.sign(
                 { userId: user.id, email: user.email, role: user.role },
                 process.env.SECRET_KEY as string
