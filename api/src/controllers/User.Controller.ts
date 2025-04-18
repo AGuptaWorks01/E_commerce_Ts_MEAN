@@ -15,11 +15,11 @@ export class UserAuth {
             const { name, email, password, role } = req.body;
 
             if (!name || !email || !password) {
-                return res.status(400).json({ message: "All fields are required" });
+                res.status(400).json({ message: "All fields are required" });
             }
 
             if (role && !Object.values(Role).includes(role)) {
-                return res.status(400).json({ message: "Invalid role provided" });
+                res.status(400).json({ message: "Invalid role provided" });
             }
 
             const userRepo = AppDataSource.getRepository(User);
@@ -28,7 +28,7 @@ export class UserAuth {
             const existingUser = await userRepo.findOne({ where: { email } })
 
             if (existingUser) {
-                return res.status(409).json({ message: "Email already exists" })
+                res.status(409).json({ message: "Email already exists" })
             }
 
             const hashPassword = await bcrypt.hash(password, 10)
@@ -68,16 +68,23 @@ export class UserAuth {
         try {
             const { email, password } = req.body;
             // Validate input
-            if (!email || !password) return res.status(404).json({ message: "All fields are required" });
+            if (!email || !password) {
+                res.status(404).json({ message: "All fields are required" });
+            }
 
             const userRepo = AppDataSource.getRepository(User);
             const user = await userRepo.findOne({ where: { email } });
-            if (!user) return res.status(409).json({ error: "User not found" })
+            if (!user) {
+                res.status(409).json({ error: "User not found" })
+                return
+            }
 
             // Compare password
             const isPasswordMatch = await bcrypt.compare(password, user.password)
             if (!isPasswordMatch) {
-                return res.status(401).json({ message: "Invalid credentials" });
+                res.status(401).json({ message: "Invalid credentials" }
+
+                );
             }
 
             // Authentication method
@@ -88,7 +95,7 @@ export class UserAuth {
             // console.log("object,",user.role);
 
             const { password: _, ...userWithoutPassword } = user
-            return res.status(200).json({ message: "Login Success", token, userWithoutPassword });
+            res.status(200).json({ message: "Login Success", token, userWithoutPassword });
 
         } catch (error) {
             console.error("Error getting while login:", error);

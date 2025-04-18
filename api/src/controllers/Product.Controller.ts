@@ -1,4 +1,4 @@
-import { NextFunction, Request, response, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../config/data-source";
 import { Product } from "../entities/Product.Entitie";
 import { ProductImage } from "../entities/ProductImage.Entitie";
@@ -14,7 +14,6 @@ export class ProductController {
     try {
       const { name, description, price, stock, sku, categoryId } = req.body;
       // console.log(req.body);
-
 
       if (!name || !description || !price || !stock || !sku || !categoryId) {
         // res.status(400).json({ error: "All fields are required" });

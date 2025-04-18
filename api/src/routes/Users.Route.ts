@@ -1,8 +1,6 @@
 import express from "express";
 import { UserAuth } from "../controllers/User.Controller";
 import { authMiddleWare, authorizeRoles } from "../middlewares/verifyToken";
-import { User } from "../entities/User.Entitie";
-
 
 const router = express.Router()
 
@@ -14,20 +12,17 @@ router.post('/login', async (req, res, next) => {
     await UserAuth.UserLogin(req, res, next)
 })
 
-
-
-
 // Apply middleware for routes accessible by admin only
-router.use('/admin', authMiddleWare, authorizeRoles('admin'));
-router.get('/admin/users', UserAuth.getAllUser);
+router.use('/', authMiddleWare, authorizeRoles('admin'));
+router.get('/admin', UserAuth.getAllUser);
 
 // Apply for admin + seller
-router.use('/admin-seller', authMiddleWare, authorizeRoles('admin', 'seller'));
-router.get('/admin-seller/users', UserAuth.getAllUser);
+router.use('/', authMiddleWare, authorizeRoles('admin', 'seller'));
+router.get('/admin-seller', UserAuth.getAllUser);
 
 // Apply for admin + seller + user
-router.use('/all', authMiddleWare, authorizeRoles('admin', 'seller', 'user'));
-router.get('/all/users', UserAuth.getAllUser);
+router.use('/', authMiddleWare, authorizeRoles('admin', 'seller', 'user'));
+router.get('/all', UserAuth.getAllUser);
 
 
 // ============================ Alternative Way ======================================
